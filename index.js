@@ -8,6 +8,12 @@ const tasks = require('./db.js')
 const app = express();
 
 app.use(express.json());
+app.use((req, res, next) => {
+    if (!["GET", "POST", "PUT", "PATCH", "DELETE"].includes(req.method))
+        return res.status(400).send(`Método ${req.method} inválido`)
+
+    next()
+})
 
 app.get('/tasks', (req, res) => {
     res.json(tasks.getTasks());
